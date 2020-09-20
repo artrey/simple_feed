@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+  <style>
+    h3 {
+      margin-bottom: 1em;
+    }
+  </style>
+{% endblock %}
+
+{% block main %}
+  <h3 class="text-center">Представьтесь, пожалуйста</h3>
+
+  <form method="post" class="row justify-content-center">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Имя и фамилия" aria-label="name" name="name">
+    </div>
+    <button type="submit" class="btn btn-primary col-auto">Войти</button>
+  </form>
+{% endblock %}

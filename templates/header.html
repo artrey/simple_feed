@@ -1,0 +1,11 @@
+<nav class="navbar navbar-light navbar-expand-md justify-content-between align-items-center nav header">
+  <div class="nav-item-panel">
+    <a class="btn btn-light" href="{% url 'feed:posts' %}">Все посты</a>
+    <a class="btn btn-light" href="{% url 'feed:new_post' %}">Добавить новый пост</a>
+  </div>
+  <div class="nav-item-panel">
+    <span>
+      Привет, {{ request.session.name|default:'Незнакомец' }}!
+    </span>
+  </div>
+</nav>

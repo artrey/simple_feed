@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+  <style>
+    .post {
+      margin-top: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+  </style>
+{% endblock %}
+
+{% block main %}
+  <div class="row justify-content-center">
+    <button onclick="window.location.reload();" class="btn btn-success col-auto">Обновить</button>
+  </div>
+
+  {% for post in object_list %}
+    <div class="card post">
+      <div class="card-header">
+        <div class="row justify-content-between">
+          <span class="col-auto">{{ post.author }}</span>
+          <span class="col-auto text-muted">{{ post.created_at|date:"Y-m-d" }} {{ post.created_at|time:"H:i:s" }}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        {{ post.text }}
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
