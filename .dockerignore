@@ -1,0 +1,15 @@
+# Ignore everything
+**
+
+# Allowed
+!feed/
+!simple_feed/
+!manage.py
+!requirements.txt
+!start.sh
+
+# Override allowed
+.idea/
+__pycache__/
+*.py[cod]
+*$py.class
