@@ -1,11 +1,15 @@
-<nav class="navbar navbar-light navbar-expand-md justify-content-between align-items-center nav header">
+<nav class="navbar navbar-light justify-content-center justify-content-sm-between align-items-center nav header">
   <div class="nav-item-panel">
-    <a class="btn btn-light" href="{% url 'feed:posts' %}">Все посты</a>
-    <a class="btn btn-light" href="{% url 'feed:new_post' %}">Добавить новый пост</a>
+    <div class="row justify-content-center">
+      <a class="btn btn-light col-auto menu" href="{% url 'feed:posts' %}">Все посты</a>
+      <a class="btn btn-light col-auto menu" href="{% url 'feed:new_post' %}">Добавить новый пост</a>
+    </div>
   </div>
   <div class="nav-item-panel">
-    <span>
-      Привет, {{ request.session.name|default:'Незнакомец' }}!
-    </span>
+    <div class="row justify-content-center">
+      <div class="col-auto user">
+        Привет, {{ request.session.name|default:'Незнакомец' }}!
+      </div>
+    </div>
   </div>
 </nav>
