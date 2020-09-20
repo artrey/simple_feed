@@ -4,6 +4,7 @@
 # Allowed
 !feed/
 !simple_feed/
+!templates/
 !manage.py
 !requirements.txt
 !start.sh
