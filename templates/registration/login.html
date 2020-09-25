@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+  <style>
+    h3 {
+      margin-bottom: 1em;
+    }
+  </style>
+{% endblock %}
+
+{% block main %}
+  <h3 class="text-center">{{ title }}</h3>
+
+  <form method="post" class="row justify-content-center">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn btn-primary col-auto">Войти</button>
+  </form>
+{% endblock %}

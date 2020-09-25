@@ -1,15 +1,24 @@
 <nav class="navbar navbar-light justify-content-center justify-content-sm-between align-items-center nav header">
   <div class="nav-item-panel">
     <div class="row justify-content-center">
-      <a class="btn btn-light col-auto menu" href="{% url 'feed:posts' %}">Все посты</a>
-      <a class="btn btn-light col-auto menu" href="{% url 'feed:new_post' %}">Добавить новый пост</a>
+      <div class="col-auto user">
+        Привет, {{ user.get_full_name|default:'Незнакомец' }}!
+      </div>
     </div>
   </div>
   <div class="nav-item-panel">
     <div class="row justify-content-center">
-      <div class="col-auto user">
-        Привет, {{ request.session.name|default:'Незнакомец' }}!
-      </div>
+      {% if user.is_authenticated %}
+        {% if user.is_superuser %}
+          <a class="btn btn-primary col-auto menu" href="{% url 'admin:index' %}">Панель администратора</a>
+        {% endif %}
+        <a class="btn btn-secondary col-auto menu" href="{% url 'feed:posts' %}">Главная</a>
+        <a class="btn btn-success col-auto menu" href="{% url 'accounts:profile' %}">Профиль</a>
+        <a class="btn btn-info col-auto menu" href="{% url 'logout' %}">Выйти</a>
+      {% else %}
+        <a class="btn btn-primary col-auto menu" href="{% url 'login' %}">Войти</a>
+        <a class="btn btn-success col-auto menu" href="{% url 'accounts:django_registration_register' %}">Зарегистрироваться</a>
+      {% endif %}
     </div>
   </div>
 </nav>

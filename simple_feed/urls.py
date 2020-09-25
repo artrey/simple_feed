@@ -18,5 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('feed.urls', namespace='feed')),
+    path('accounts/', include('apps.user.urls', namespace='accounts')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('', include('apps.feed.urls', namespace='feed')),
 ]

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+  <style>
+    h3 {
+      margin-bottom: 1em;
+    }
+  </style>
+{% endblock %}
+
+{% block main %}
+  <h3 class="text-center">{{ title }}</h3>
+
+  <form method="post" class="row justify-content-center">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn btn-success col-auto">Войти</button>
+  </form>
+
+  <a class="btn btn-primary col-auto menu" href="{% url 'password_change' %}">Сменить пароль</a>
+{% endblock %}
