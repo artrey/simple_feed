@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'crispy_forms',
     'django_registration',
 
     'apps.user',
@@ -134,6 +135,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']

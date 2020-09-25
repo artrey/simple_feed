@@ -2,14 +2,11 @@
 
 {% block extra_head %}
   <style>
-    h3 {
-      margin-bottom: 1em;
-    }
   </style>
 {% endblock %}
 
 {% block main %}
-  <h3 class="text-center">{{ title }}</h3>
+  {% include 'partials/title.html' with title='Регистрация' %}
 
   <form method="post" class="row justify-content-center">
     {% csrf_token %}

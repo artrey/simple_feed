@@ -1,19 +1,18 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block extra_head %}
   <style>
-    h3 {
-      margin-bottom: 1em;
-    }
   </style>
 {% endblock %}
 
 {% block main %}
-  <h3 class="text-center">{{ title }}</h3>
+  {% include 'partials/title.html' with title='Вход' %}
 
   <form method="post" class="row justify-content-center">
     {% csrf_token %}
-    {{ form }}
-    <button type="submit" class="btn btn-primary col-auto">Войти</button>
+    {{ form|crispy }}
+    {% include 'partials/form_submit_button.html' with text='Войти' type='btn-primary' %}
   </form>
 {% endblock %}
