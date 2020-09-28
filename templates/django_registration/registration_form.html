@@ -1,16 +1,6 @@
 {% extends 'base.html' %}
 
-{% block extra_head %}
-  <style>
-  </style>
-{% endblock %}
-
 {% block main %}
   {% include 'partials/title.html' with title='Регистрация' %}
-
-  <form method="post" class="row justify-content-center">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" class="btn btn-primary col-auto">Войти</button>
-  </form>
+  {% include 'partials/crispy_form.html' with submit_text='Зарегистрироваться' submit_type='btn-success' %}
 {% endblock %}

@@ -1,0 +1,7 @@
+{% load crispy_forms_tags %}
+
+<form method="post" class="row justify-content-center">
+  {% csrf_token %}
+  {{ form|crispy }}
+  {% include 'partials/form_submit_button.html' with text=submit_text type=submit_type %}
+</form>
