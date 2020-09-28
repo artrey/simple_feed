@@ -8,6 +8,12 @@ from . import models, forms
 class Posts(LoginRequiredMixin, ListView):
     template_name = 'feed/posts.html'
     model = models.Post
+    paginate_by = 10
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(parent_id=self.kwargs.get('parent'))
+        return qs
 
 
 class NewPost(LoginRequiredMixin, FormView):

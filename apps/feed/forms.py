@@ -6,4 +6,4 @@ from . import models
 class PostForm(forms.ModelForm):
     class Meta:
         model = models.Post
-        fields = 'text',
+        fields = 'body',

@@ -5,6 +5,15 @@
     .post {
       margin-top: 0.8rem;
       margin-bottom: 0.8rem;
+      text-decoration: none;
+    }
+
+    .post:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .post__author, .post__body, .post__count {
+      color: black;
     }
   </style>
 {% endblock %}
@@ -15,16 +24,19 @@
   </div>
 
   {% for post in object_list %}
-    <div class="card post">
+    <a href="{% url 'feed:posts' parent=post.id %}" class="card post">
       <div class="card-header">
         <div class="row justify-content-between">
-          <span class="col-auto">{{ post.author }}</span>
+          <span class="col-auto post__author">{{ post.author }}</span>
           <span class="col-auto text-muted">{{ post.created_at|date:"Y-m-d" }} {{ post.created_at|time:"H:i:s" }}</span>
         </div>
       </div>
-      <div class="card-body">
-        {{ post.text }}
+      <div class="card-body post__body">
+        {{ post.body }}
       </div>
-    </div>
+      <div class="card-footer post__count">
+        Количество постов: {{ post.get_descendant_count }}
+      </div>
+    </a>
   {% endfor %}
 {% endblock %}

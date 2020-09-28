@@ -3,3 +3,4 @@ python-decouple
 psycopg2-binary
 django-registration
 django-crispy-forms
+django-mptt
