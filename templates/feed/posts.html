@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load mptt_tags %}
+
 {% block extra_head %}
   <style>
     .post {
@@ -24,6 +26,33 @@
   </div>
 
   {% for post in object_list %}
+    {% drilldown_tree_for_node post as drilldown %}
+
+    {% for node, structure in drilldown|tree_info %}
+      {% if node.level >= post.level %}
+        {% if structure.new_level %}
+          <ul>
+          <li>{% else %}</li>
+          <li>{% endif %}
+      {% if node == post %}
+        <strong>{{ node.body }}</strong>
+      {% else %}
+        <a href="{{ node.get_absolute_url }}">{{ node.body }}</a>
+      {% endif %}
+      {% for level in structure.closed_levels %}</li></ul>{% endfor %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  <form method="post" class="row justify-content-center">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      <textarea class="form-control" placeholder="Содержимое поста" aria-label="body" name="body"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary col-auto">Создать новый пост</button>
+  </form>
+
+  {% for post in object_list %}
     <a href="{% url 'feed:posts' parent=post.id %}" class="card post">
       <div class="card-header">
         <div class="row justify-content-between">
@@ -39,4 +68,14 @@
       </div>
     </a>
   {% endfor %}
+{% endblock %}
+
+{% block extrajs %}
+  <script>
+    window.onload = function () {
+      setTimeout(function () {
+        window.location.reload();
+      }, 5000);
+    }
+  </script>
 {% endblock %}
