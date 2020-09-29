@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 
 {% load mptt_tags %}
+{% load math %}
 
 {% block extra_head %}
   <style>
+    .current_post {
+      margin-bottom: 1.6rem;
+    }
+
     .post {
       margin-top: 0.8rem;
       margin-bottom: 0.8rem;
@@ -17,65 +22,101 @@
     .post__author, .post__body, .post__count {
       color: black;
     }
+
+    .pages {
+      margin-bottom: 1rem;
+    }
   </style>
 {% endblock %}
 
 {% block main %}
-  <div class="row justify-content-center">
-    <button onclick="window.location.reload();" class="btn btn-success col-auto">Обновить</button>
-  </div>
+  {% if current_post %}
+    <div class="card current_post">
+      <div class="card-header">
+        <div class="row justify-content-between align-items-center">
+          <span class="col-auto post__author">{{ current_post.author }}</span>
+          <span class="col-auto post__back">
+            {% if current_post.parent %}
+              {% url 'feed:posts' post_id=current_post.parent.id as back_url %}
+            {% else %}
+              {% url 'feed:posts' as back_url %}
+            {% endif %}
+            <a href="{{ back_url }}" class="btn btn-success" role="button">Назад</a>
+          </span>
+          <span class="col-auto text-muted">
+            {{ current_post.created_at|date:"Y-m-d" }} {{ current_post.created_at|time:"H:i:s" }}
+          </span>
+        </div>
+      </div>
+      <div class="card-body post__body">
+        {{ current_post.body }}
+      </div>
+      <div class="card-footer post__count">
+        Количество постов: {{ current_post.get_descendant_count }}
+      </div>
+    </div>
+  {% endif %}
+
+  {% include 'partials/crispy_form.html' with submit_text='Добавить пост' submit_type='btn-primary' %}
 
   {% for post in object_list %}
     {% drilldown_tree_for_node post as drilldown %}
 
     {% for node, structure in drilldown|tree_info %}
-      {% if node.level >= post.level %}
-        {% if structure.new_level %}
-          <ul>
-          <li>{% else %}</li>
-          <li>{% endif %}
-      {% if node == post %}
-        <strong>{{ node.body }}</strong>
-      {% else %}
-        <a href="{{ node.get_absolute_url }}">{{ node.body }}</a>
-      {% endif %}
-      {% for level in structure.closed_levels %}</li></ul>{% endfor %}
+      {% if node.level == post.level %}
+        <a href="{% url 'feed:posts' post_id=node.id %}" class="card post"
+           style="margin-left: {{ node.level|minus:post.level|mult:2 }}rem">
+          <div class="card-header">
+            <div class="row justify-content-between">
+              <span class="col-auto post__author">{{ node.author }}</span>
+              <span class="col-auto text-muted">
+                {{ node.created_at|date:"Y-m-d" }} {{ node.created_at|time:"H:i:s" }}
+              </span>
+            </div>
+          </div>
+          <div class="card-body post__body">
+            {{ node.body }}
+          </div>
+          <div class="card-footer post__count">
+            Количество постов: {{ node.get_descendant_count }}
+          </div>
+        </a>
       {% endif %}
     {% endfor %}
   {% endfor %}
 
-  <form method="post" class="row justify-content-center">
-    {% csrf_token %}
-    <div class="input-group mb-3">
-      <textarea class="form-control" placeholder="Содержимое поста" aria-label="body" name="body"></textarea>
+  {% if paginator.num_pages > 1 %}
+    <div class="row justify-content-center pages">
+      <div class="btn-group col-auto">
+        {% for number in paginator.page_range %}
+          <a href="?page={{ number }}"
+             class="btn btn-primary{% if number == page_obj.number %} active disabled{% endif %}">
+            {{ number }}
+          </a>
+        {% endfor %}
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary col-auto">Создать новый пост</button>
-  </form>
-
-  {% for post in object_list %}
-    <a href="{% url 'feed:posts' parent=post.id %}" class="card post">
-      <div class="card-header">
-        <div class="row justify-content-between">
-          <span class="col-auto post__author">{{ post.author }}</span>
-          <span class="col-auto text-muted">{{ post.created_at|date:"Y-m-d" }} {{ post.created_at|time:"H:i:s" }}</span>
-        </div>
-      </div>
-      <div class="card-body post__body">
-        {{ post.body }}
-      </div>
-      <div class="card-footer post__count">
-        Количество постов: {{ post.get_descendant_count }}
-      </div>
-    </a>
-  {% endfor %}
+  {% endif %}
 {% endblock %}
 
 {% block extrajs %}
   <script>
-    window.onload = function () {
-      setTimeout(function () {
+    function makeTimer() {
+      return setTimeout(function () {
         window.location.reload();
-      }, 5000);
+      }, 60000);
+    }
+
+    window.onload = function () {
+      var timeoutId = makeTimer();
+      document.getElementById('new-body').onfocus = function () {
+        clearTimeout(timeoutId);
+      };
+      document.getElementById('new-body').onblur = function () {
+        if (!document.getElementById('new-body').value) {
+          timeoutId = makeTimer();
+        }
+      };
     }
   </script>
 {% endblock %}
