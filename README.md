@@ -1,3 +1,3 @@
 # Simple feed
 
-Simple feed like news feed in VK for demonstrating
+A simple feed with comments to posts (unlimited nesting)
