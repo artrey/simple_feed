@@ -2,7 +2,7 @@
 **
 
 # Allowed
-!feed/
+!apps/
 !simple_feed/
 !templates/
 !manage.py
