@@ -108,12 +108,13 @@
     }
 
     window.onload = function () {
+      var elementId = 'id_body';
       var timeoutId = makeTimer();
-      document.getElementById('new-body').onfocus = function () {
+      document.getElementById(elementId).onfocus = function () {
         clearTimeout(timeoutId);
       };
-      document.getElementById('new-body').onblur = function () {
-        if (!document.getElementById('new-body').value) {
+      document.getElementById(elementId).onblur = function () {
+        if (!document.getElementById(elementId).value) {
           timeoutId = makeTimer();
         }
       };
