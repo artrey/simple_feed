@@ -3,6 +3,7 @@
 
 # Allowed
 !apps/
+!assets/
 !simple_feed/
 !templates/
 !manage.py
