@@ -1,9 +1,10 @@
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import FormView
+
 from . import forms
 
 
-class ProfileView(FormView):
+class ProfileView(LoginRequiredMixin, FormView):
     form_class = forms.ProfileForm
     template_name = 'user/profile.html'
 
