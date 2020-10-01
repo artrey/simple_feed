@@ -4,23 +4,21 @@
 {% load math %}
 
 {% block extra_head %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css"/>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+
   <style>
-    .current_post {
+    .post {
+      margin-top: 0.8rem;
       margin-bottom: 1.6rem;
     }
 
-    .post {
-      margin-top: 0.8rem;
-      margin-bottom: 0.8rem;
-      text-decoration: none;
+    .post__body p, .post__body ol, .post__body ul {
+      margin: 0;
     }
 
-    .post:hover {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .post__author, .post__body, .post__count {
-      color: black;
+    .post__body img {
+      max-width: 100%;
     }
 
     .pages {
@@ -31,56 +29,20 @@
 
 {% block main %}
   {% if current_post %}
-    <div class="card current_post">
-      <div class="card-header">
-        <div class="row justify-content-between align-items-center">
-          <span class="col-auto post__author">{{ current_post.author }}</span>
-          <span class="col-auto post__back">
-            {% if current_post.parent %}
-              {% url 'feed:posts' post_id=current_post.parent.id as back_url %}
-            {% else %}
-              {% url 'feed:posts' as back_url %}
-            {% endif %}
-            <a href="{{ back_url }}" class="btn btn-success" role="button">Назад</a>
-          </span>
-          <span class="col-auto text-muted">
-            {{ current_post.created_at|date:"Y-m-d" }} {{ current_post.created_at|time:"H:i:s" }}
-          </span>
-        </div>
-      </div>
-      <div class="card-body post__body">
-        {{ current_post.body }}
-      </div>
-      <div class="card-footer post__count">
-        Количество постов: {{ current_post.get_descendant_count }}
-      </div>
-    </div>
+    {% include 'partials/post.html' with post=current_post need_back=True can_dive_to_thread=False %}
   {% endif %}
 
-  {% include 'partials/crispy_form.html' with submit_text='Добавить пост' submit_type='btn-primary' %}
+  <div id="editor"></div>
+  <div id="new-post-form">
+    {% include 'partials/crispy_form.html' with submit_text='Добавить пост' submit_type='btn-primary' %}
+  </div>
 
   {% for post in object_list %}
     {% drilldown_tree_for_node post as drilldown %}
 
     {% for node, structure in drilldown|tree_info %}
       {% if node.level == post.level %}
-        <a href="{% url 'feed:posts' post_id=node.id %}" class="card post"
-           style="margin-left: {{ node.level|minus:post.level|mult:2 }}rem">
-          <div class="card-header">
-            <div class="row justify-content-between">
-              <span class="col-auto post__author">{{ node.author }}</span>
-              <span class="col-auto text-muted">
-                {{ node.created_at|date:"Y-m-d" }} {{ node.created_at|time:"H:i:s" }}
-              </span>
-            </div>
-          </div>
-          <div class="card-body post__body">
-            {{ node.body }}
-          </div>
-          <div class="card-footer post__count">
-            Количество постов: {{ node.get_descendant_count }}
-          </div>
-        </a>
+        {% include 'partials/post.html' with post=node need_back=False can_dive_to_thread=True %}
       {% endif %}
     {% endfor %}
   {% endfor %}
@@ -100,24 +62,21 @@
 {% endblock %}
 
 {% block extrajs %}
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
   <script>
-    function makeTimer() {
-      return setTimeout(function () {
-        window.location.reload();
-      }, 60000);
-    }
+    var editor = new toastui.Editor({
+      el: document.querySelector('#editor'),
+      height: '300px',
+      initialEditType: 'wysiwyg',
+      previewStyle: 'horizontal'
+    });
 
     window.onload = function () {
-      var elementId = 'id_body';
-      var timeoutId = makeTimer();
-      document.getElementById(elementId).onfocus = function () {
-        clearTimeout(timeoutId);
+      var btn = document.getElementById('new-post-form').getElementsByTagName('button')[0];
+      btn.onclick = function () {
+        document.getElementById('id_body').value = editor.getHtml();
       };
-      document.getElementById(elementId).onblur = function () {
-        if (!document.getElementById(elementId).value) {
-          timeoutId = makeTimer();
-        }
-      };
-    }
+    };
   </script>
 {% endblock %}

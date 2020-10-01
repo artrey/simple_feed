@@ -8,7 +8,7 @@ from . import models, forms
 class Posts(LoginRequiredMixin, ListView):
     template_name = 'feed/posts.html'
     model = models.Post
-    paginate_by = 5
+    paginate_by = 10
 
     @property
     def current_post_id(self):

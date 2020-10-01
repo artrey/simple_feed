@@ -8,9 +8,5 @@ class PostForm(forms.ModelForm):
         model = models.Post
         fields = 'body',
         widgets = {
-            'body': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Содержание поста'}),
+            'body': forms.HiddenInput(),
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['body'].label = False
