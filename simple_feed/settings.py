@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import typing
 from decouple import config
 from django.urls import reverse_lazy
 
@@ -27,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY', default='secret-key')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-def comma_separated_list(string: str) -> list:
+def comma_separated_list(string: str) -> typing.List[typing.Union[str, int]]:
     return [x.strip() for x in string.split(',') if x.strip()]
 
 

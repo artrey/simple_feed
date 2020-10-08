@@ -1,3 +1,4 @@
+import typing
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import FormView
 
@@ -12,7 +13,7 @@ class ProfileView(LoginRequiredMixin, FormView):
         form.save()
         return self.render_to_response(self.get_context_data(success=True))
 
-    def get_form_kwargs(self) -> dict:
+    def get_form_kwargs(self) -> typing.Dict[str, typing.Any]:
         kwargs = super().get_form_kwargs()
         kwargs.update(instance=self.request.user)
         return kwargs
