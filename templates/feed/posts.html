@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
 
   <style>
+    .collapser {
+      margin-bottom: 1rem;
+    }
+
     .post {
       margin-top: 0.8rem;
       margin-bottom: 1.6rem;
@@ -32,9 +36,17 @@
     {% include 'partials/post.html' with post=current_post need_back=True can_dive_to_thread=False %}
   {% endif %}
 
-  <div id="editor"></div>
-  <div id="new-post-form">
-    {% include 'partials/crispy_form.html' with submit_text='Добавить пост' submit_type='btn-primary' %}
+  <div class="row justify-content-center">
+    <a class="col-auto btn btn-success text-center collapser" data-toggle="collapse"
+       href="#collapse-editor" aria-expanded="false" aria-controls="collapse-editor">
+      Развернуть/свернуть поле для добавления поста
+    </a>
+    <div class="collapse" id="collapse-editor">
+      <div id="editor"></div>
+      <div id="new-post-form">
+        {% include 'partials/crispy_form.html' with submit_text='Добавить пост' submit_type='btn-primary' %}
+      </div>
+    </div>
   </div>
 
   {% for post in object_list %}
@@ -62,6 +74,9 @@
 {% endblock %}
 
 {% block extrajs %}
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.bundle.min.js"
+          integrity="sha384-BOsAfwzjNJHrJ8cZidOg56tcQWfp6y72vEJ8xQ9w6Quywb24iOsW913URv1IS4GD"
+          crossorigin="anonymous"></script>
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
   <script>
@@ -77,6 +92,11 @@
       btn.onclick = function () {
         document.getElementById('id_body').value = editor.getHtml();
       };
+
+      {# hack: collapsed element has incorrect min-height #}
+      for (var el of document.getElementsByClassName('tui-editor-contents')) {
+        el.style = 'min-height: 0';
+      }
     };
   </script>
 {% endblock %}
