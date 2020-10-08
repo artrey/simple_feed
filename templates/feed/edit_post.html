@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css"/>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+{% endblock %}
+
+{% block main %}
+  {% include 'partials/title.html' with title='Редактирование поста' %}
+
+  <div id="editor"></div>
+  <div id="post-form-editor">
+    {% include 'partials/crispy_form.html' with submit_text='Сохранить' submit_type='btn-primary' %}
+  </div>
+{% endblock %}
+
+{% block extrajs %}
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+  <script>
+    var editor = new toastui.Editor({
+      el: document.querySelector('#editor'),
+      height: '500px',
+      initialEditType: 'wysiwyg',
+      previewStyle: 'horizontal',
+      initialValue: `{{ form.body.value|safe }}`,
+    });
+
+    window.onload = function () {
+      var btn = document.getElementById('post-form-editor').getElementsByTagName('button')[0];
+      btn.onclick = function () {
+        document.getElementById('id_body').value = editor.getHtml();
+      };
+    };
+  </script>
+{% endblock %}

@@ -7,4 +7,5 @@ app_name = 'apps.feed'
 urlpatterns = [
     path('', views.Posts.as_view(), name='posts'),
     path('<str:post_id>/', views.Posts.as_view(), name='posts'),
+    path('<str:post_id>/edit/', views.EditPost.as_view(), name='post-edit'),
 ]

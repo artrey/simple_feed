@@ -1,6 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+import typing
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView
+from django.urls import reverse
+from django.views.generic import ListView, UpdateView
 
 from . import models, forms
 
@@ -38,3 +41,19 @@ class Posts(LoginRequiredMixin, ListView):
             post.parent_id = self.current_post_id
             post.save()
         return HttpResponseRedirect(request.path_info)
+
+
+class EditPost(UserPassesTestMixin, UpdateView):
+    raise_exception = True
+    model = models.Post
+    pk_url_kwarg = 'post_id'
+    form_class = forms.PostForm
+    template_name = 'feed/edit_post.html'
+
+    def test_func(self) -> typing.Optional[bool]:
+        if self.request.user.is_staff:
+            return True
+        return self.get_object().author == self.request.user
+
+    def get_success_url(self):
+        return reverse('feed:posts', args=(self.object.pk,))
