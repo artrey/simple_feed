@@ -8,8 +8,13 @@
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
 
   <style>
+    .editor {
+      display: flex;
+      flex-direction: column;
+    }
+
     .collapser {
-      margin-bottom: 1rem;
+      margin: 0 auto 1rem auto;
     }
 
     .post {
@@ -36,8 +41,8 @@
     {% include 'partials/post.html' with post=current_post need_back=True can_dive_to_thread=False %}
   {% endif %}
 
-  <div class="row justify-content-center">
-    <a class="col-auto btn btn-success text-center collapser" data-toggle="collapse"
+  <div class="editor">
+    <a class="btn btn-success text-center collapser" data-toggle="collapse"
        href="#collapse-editor" aria-expanded="false" aria-controls="collapse-editor">
       Развернуть/свернуть поле для добавления поста
     </a>
