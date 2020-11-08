@@ -2,5 +2,10 @@
 
 {% block main %}
   {% include 'partials/title.html' with title='Вход' %}
+
   {% include 'partials/crispy_form.html' with submit_text='Войти' submit_type='btn-primary' %}
+
+  <div class="row justify-content-center">
+    <a class="btn btn-success col-auto menu" href="{% url 'password_reset' %}">Восстановление пароля</a>
+  </div>
 {% endblock %}

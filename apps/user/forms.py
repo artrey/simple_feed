@@ -4,8 +4,8 @@ from django_registration import forms as registration_forms
 from . import models
 
 
-class RegistrationForm(registration_forms.RegistrationForm):
-    class Meta(registration_forms.RegistrationForm.Meta):
+class RegistrationForm(registration_forms.RegistrationFormUniqueEmail):
+    class Meta(registration_forms.RegistrationFormUniqueEmail.Meta):
         model = models.User
 
 
